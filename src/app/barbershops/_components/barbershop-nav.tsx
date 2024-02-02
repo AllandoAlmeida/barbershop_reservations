@@ -5,6 +5,8 @@ import { ChevronLeftIcon, MapPinIcon, MenuIcon, StarIcon } from "lucide-react";
 import Image from "next/image";
 import React from "react";
 import { useRouter } from "next/navigation";
+import { Sheet, SheetContent, SheetTrigger } from "@/_components/ui/sheet";
+import SidMenu from "@/_components/sid-menu";
 
 interface BarbershopDetaitsProps {
   barbershop: Barbershop;
@@ -14,7 +16,7 @@ const BarbershopNav = ({ barbershop }: BarbershopDetaitsProps) => {
   const router = useRouter();
 
   const handleBackClick = () => {
-    router.back();
+    router.replace('/');
   };
   return (
     <>
@@ -27,13 +29,23 @@ const BarbershopNav = ({ barbershop }: BarbershopDetaitsProps) => {
         >
           <ChevronLeftIcon />
         </Button>
-        <Button
-          size={"icon"}
-          variant={"outline"}
-          className="z-50 absolute top-4 right-4"
-        >
-          <MenuIcon />
-        </Button>
+
+        <Sheet>
+          {/* Botão para abrir o menu */}
+          <SheetTrigger asChild>
+            <Button
+              size={"icon"}
+              variant={"outline"}
+              className="z-50 absolute top-4 right-4"
+            >
+              <MenuIcon />
+            </Button>
+          </SheetTrigger>
+          {/* conteudo do menu */}
+          <SheetContent className="p-0">
+            <SidMenu />
+          </SheetContent>
+        </Sheet>
 
         <Image
           src={barbershop.imageUrl}
