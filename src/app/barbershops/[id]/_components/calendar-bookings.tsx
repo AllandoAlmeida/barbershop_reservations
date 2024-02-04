@@ -5,8 +5,11 @@ import { generateDayTimeList } from "../_helpers/hours";
 import { Button } from "@/_components/ui/button";
 import { Barbershop, Service } from "@prisma/client";
 import { Card, CardContent } from "@/_components/ui/card";
-import { format } from "date-fns";
+import { format, setHours, setMinutes } from "date-fns";
 import { SheetFooter } from "@/_components/ui/sheet";
+import { saveBooking } from "../_actions/save-bookings";
+import { useSession } from "next-auth/react";
+import { Loader2 } from "lucide-react";
 
 interface CalendarBookingsProps {
   barbershop: Barbershop;
@@ -14,8 +17,10 @@ interface CalendarBookingsProps {
 }
 
 const CalendarBookings = ({ service, barbershop }: CalendarBookingsProps) => {
+  const { data } = useSession();
   const [date, setDate] = useState<Date | undefined>(undefined);
   const [hour, setHour] = useState<string | undefined>();
+  const [loading, setLoading] =  useState(false);
 
   const handleSelectDate = (date: Date | undefined) => {
     setDate(date);
@@ -28,6 +33,30 @@ const CalendarBookings = ({ service, barbershop }: CalendarBookingsProps) => {
 
   const handlerSelectHour = (time: string) => {
     setHour(time);
+  };
+
+  const handleCreateBooking = async () => {
+    setLoading(true)
+    try {
+      if (!date || !hour || !data?.user) {
+        throw new Error("Selecione data e hora para a reserva");
+      }
+
+      const dateHour = Number(hour.split(":")[0]);
+      const dateMinutes = Number(hour.split(":")[1]);
+      const newDate = setMinutes(setHours(date, dateHour), dateMinutes);
+
+      await saveBooking({
+        serviceId: service.id,
+        barbershopId: barbershop.id,
+        date: newDate,
+        userId: (data.user as any).id,
+      });
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -117,7 +146,9 @@ const CalendarBookings = ({ service, barbershop }: CalendarBookingsProps) => {
           </CardContent>
         </Card>
         <SheetFooter className="py-6">
-          <Button disabled={!hour || !date}>Confirmar reserva</Button>
+          <Button onClick={handleCreateBooking} disabled={!hour || !date || loading}>
+            {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+            Confirmar reserva</Button>
         </SheetFooter>
       </div>
     </div>
