@@ -13,6 +13,7 @@ import { Barbershop, Service } from "@prisma/client";
 import { signIn } from "next-auth/react";
 import Image from "next/image";
 import CalendarBookings from "./calendar-bookings";
+import { useState } from "react";
 
 interface BarbershopServiceProps {
   barbershop: Barbershop;
@@ -25,6 +26,7 @@ const BarbershopService = ({
   service,
   isAuthenticated,
 }: BarbershopServiceProps) => {
+  const [sheetIsOpen, setSheetIsOpen] = useState(false)
   const handleCreateBooking = () => {
     if (!isAuthenticated) return signIn("google");
   };
@@ -51,7 +53,7 @@ const BarbershopService = ({
                   currency: "BRL",
                 }).format(Number(service.price))}
               </p>
-              <Sheet>
+              <Sheet open={sheetIsOpen} onOpenChange={setSheetIsOpen}>
                 <SheetTrigger>
                   <Button
                     variant={"secondary"}
@@ -65,7 +67,7 @@ const BarbershopService = ({
                   <SheetHeader className="text-left px-5 py-6 border-b border-solid border-secundary">
                     <SheetTitle>Fazer reserva</SheetTitle>
                   </SheetHeader>
-                  <CalendarBookings service={service} barbershop={barbershop} />
+                  <CalendarBookings service={service} barbershop={barbershop} setSheetIsOpen={setSheetIsOpen}/>
                   
                 </SheetContent>
               </Sheet>

@@ -10,17 +10,25 @@ import { SheetFooter } from "@/_components/ui/sheet";
 import { saveBooking } from "../_actions/save-bookings";
 import { useSession } from "next-auth/react";
 import { Loader2 } from "lucide-react";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 interface CalendarBookingsProps {
   barbershop: Barbershop;
   service: Service;
+  setSheetIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const CalendarBookings = ({ service, barbershop }: CalendarBookingsProps) => {
+const CalendarBookings = ({
+  service,
+  barbershop,
+  setSheetIsOpen,
+}: CalendarBookingsProps) => {
+  const router = useRouter();
   const { data } = useSession();
   const [date, setDate] = useState<Date | undefined>(undefined);
   const [hour, setHour] = useState<string | undefined>();
-  const [loading, setLoading] =  useState(false);
+  const [loading, setLoading] = useState(false);
 
   const handleSelectDate = (date: Date | undefined) => {
     setDate(date);
@@ -36,7 +44,7 @@ const CalendarBookings = ({ service, barbershop }: CalendarBookingsProps) => {
   };
 
   const handleCreateBooking = async () => {
-    setLoading(true)
+    setLoading(true);
     try {
       if (!date || !hour || !data?.user) {
         throw new Error("Selecione data e hora para a reserva");
@@ -52,7 +60,24 @@ const CalendarBookings = ({ service, barbershop }: CalendarBookingsProps) => {
         date: newDate,
         userId: (data.user as any).id,
       });
+      setSheetIsOpen(false);
+      setHour(undefined),
+        setDate(undefined),
+        toast.success("Reserva realiza com Sucesso", {
+          position: "top-right",
+          style: {
+            borderRadius: "8px",
+            backgroundColor: "rgb(16, 111, 84)",
+            color: "#fff",
+            fontFamily: "Archivo Black",
+          },
+          description: format(newDate, "'Para' dd 'de' MMMM',' H:mm", {
+            locale: ptBR,
+          }),
+        });
+      router.push("/teste");
     } catch (error) {
+      toast.error("Event has not been created");
       console.log(error);
     } finally {
       setLoading(false);
@@ -146,9 +171,13 @@ const CalendarBookings = ({ service, barbershop }: CalendarBookingsProps) => {
           </CardContent>
         </Card>
         <SheetFooter className="py-6">
-          <Button onClick={handleCreateBooking} disabled={!hour || !date || loading}>
+          <Button
+            onClick={handleCreateBooking}
+            disabled={!hour || !date || loading}
+          >
             {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-            Confirmar reserva</Button>
+            Confirmar reserva
+          </Button>
         </SheetFooter>
       </div>
     </div>
