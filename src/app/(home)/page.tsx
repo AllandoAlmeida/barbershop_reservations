@@ -4,8 +4,8 @@ import { db } from "@/_lib/prisma";
 import BarbershopItem from "./_components/barbershop-items";
 import WelcomeOrSearch from "./_components/welcome-search";
 import { getServerSession } from "next-auth";
-import { authOptions } from "../api/auth/[...nextauth]/route";
 import { ListRandomBarbershops } from "../_helpers/list-random-barbershops";
+import { authOptions } from "@/_lib/auth";
 
 export default async function Home() {
   const session = await getServerSession(authOptions);

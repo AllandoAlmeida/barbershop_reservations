@@ -1,9 +1,9 @@
 import Header from "@/_components/header";
 import { getServerSession } from "next-auth";
-import { authOptions } from "../api/auth/[...nextauth]/route";
 import { db } from "@/_lib/prisma";
 import BookingItem from "@/_components/card-bookings";
 import { redirect } from "next/navigation";
+import { authOptions } from "@/_lib/auth";
 
 const Bookings = async () => {
   const session = await getServerSession(authOptions);

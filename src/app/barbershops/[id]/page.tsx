@@ -2,7 +2,7 @@ import { db } from "@/_lib/prisma";
 import BarbershopNav from "./_components/barbershop-nav";
 import BarbershopService from "./_components/barbershop-service";
 import { getServerSession } from "next-auth";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { authOptions } from "@/_lib/auth";
 
 interface BarbershopDetailsProps {
   params: { id?: string };
