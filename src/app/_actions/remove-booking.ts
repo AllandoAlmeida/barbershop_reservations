@@ -10,5 +10,6 @@ export const removeBooking = async (bookingId: string) => {
     },
   });
 
+  revalidatePath("/")
   revalidatePath("/bookings");
 };

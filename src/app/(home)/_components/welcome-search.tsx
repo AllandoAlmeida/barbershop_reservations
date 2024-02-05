@@ -10,11 +10,13 @@ const WelcomeOrSearch = () => {
     <div>
       <div className="px-5 pt-5 ">
         {data?.user ? (
-          <h2 className="text-xl font-bold">Olá, {data.user.name}</h2>
+          <h2 className="text-xl font-bold">
+            Olá, {data.user.name?.split(" ")[0]}!
+          </h2>
         ) : (
           <h2 className="text-xl font-bold">Olá, Seja bem vindo!</h2>
         )}
-        <p className="capitalize text-sm">
+        <p className="text-sm">
           {format(new Date(), "EEEE',' dd 'de' MMMM ", {
             locale: ptBR,
           })}

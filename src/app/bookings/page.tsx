@@ -44,7 +44,7 @@ const Bookings = async () => {
     <>
       <Header />
       <div className="px-5 py-6">
-        <h1 className="text-xl font-bold">Agendamentos</h1>
+        <h1 className="text-xl font-bold mb-6">Agendamentos</h1>
         {!confirmedBooking?.length ? (
           <div className="py-6">
             <h3 className="text-gray-600 uppercase font-bold text-sm mt-6 mb-3">
@@ -66,9 +66,8 @@ const Bookings = async () => {
 
         {!finashedBooking?.length ? (
           <div className="py-6">
-            <h3 className="text-gray-600 uppercase font-bold text-sm mt-6 mb-3">
-              Não há histórico de agendamentos finalizados
-            </h3>
+            <>
+            </>
           </div>
         ) : (
           <>
