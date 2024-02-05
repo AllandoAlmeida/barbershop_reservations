@@ -1,9 +1,9 @@
 import { Calendar } from "@/_components/ui/calendar";
 import { ptBR } from "date-fns/locale";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { generateDayTimeList } from "../_helpers/hours";
 import { Button } from "@/_components/ui/button";
-import { Barbershop, Service } from "@prisma/client";
+import { Barbershop, Booking, Service } from "@prisma/client";
 import { Card, CardContent } from "@/_components/ui/card";
 import { format, setHours, setMinutes } from "date-fns";
 import { SheetFooter } from "@/_components/ui/sheet";
@@ -12,6 +12,7 @@ import { useSession } from "next-auth/react";
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { getDayBookings } from "../_actions/get-day-bookings";
 
 interface CalendarBookingsProps {
   barbershop: Barbershop;
@@ -29,6 +30,22 @@ const CalendarBookings = ({
   const [date, setDate] = useState<Date | undefined>(undefined);
   const [hour, setHour] = useState<string | undefined>();
   const [loading, setLoading] = useState(false);
+  const [dayBookings, setDayBookings] = useState<Booking[]>([]);
+
+  console.log({ dayBookings });
+
+  useEffect(() => {
+    if (!date) {
+      return;
+    }
+
+    const refreshAvailableHours = async () => {
+      const listDayBookings = await getDayBookings(barbershop.id, date);
+      setDayBookings(listDayBookings);
+    };
+
+    refreshAvailableHours();
+  }, [date,  barbershop.id]);
 
   const handleSelectDate = (date: Date | undefined) => {
     setDate(date);
@@ -36,8 +53,30 @@ const CalendarBookings = ({
   };
 
   const timeList = useMemo(() => {
-    return date ? generateDayTimeList(date) : [];
-  }, [date]);
+    if (!date) {
+      return []
+    }
+    return generateDayTimeList(date).filter(time => {
+
+      const timeHour = Number(time.split(":")[0]);
+      const timeMinutes = Number(time.split(":")[1]);
+
+      const booking = dayBookings.find(booking => {
+        const bookingHour = booking.date.getHours();
+        const bookingMinutes = booking.date.getMinutes();
+
+        return bookingHour == timeHour && bookingMinutes == timeMinutes;
+      })
+
+      if(!booking) {
+        return true; // No hay una cita en ese momento de tiempo
+      }
+
+      return false
+
+
+    })
+  }, [date, dayBookings]);
 
   const handlerSelectHour = (time: string) => {
     setHour(time);
@@ -75,7 +114,7 @@ const CalendarBookings = ({
             locale: ptBR,
           }),
         });
-      router.push("/teste");
+      router.push("/bookings");
     } catch (error) {
       toast.error("Event has not been created");
       console.log(error);

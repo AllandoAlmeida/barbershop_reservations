@@ -31,12 +31,14 @@ const header = () => {
   return (
     <Card>
       <CardContent className="py-5 px-8 justify-between items-center flex flex-row">
+        <Link href={"/"}>
         <Image
           src="/logo.png"
           alt={"Logo FSW Barber"}
           height={22}
           width={120}
         />
+        </Link>
         <Sheet>
           {/* Botão para abrir o menu */}
           <SheetTrigger asChild>
