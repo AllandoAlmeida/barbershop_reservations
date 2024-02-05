@@ -1,44 +1,34 @@
 import Header from "@/_components/header";
-
-import BookingItem from "@/_components/booking-item";
+import BookingItem from "@/_components/card-bookings";
 import { db } from "@/_lib/prisma";
 import BarbershopItem from "./_components/barbershop-items";
 import WelcomeOrSearch from "./_components/welcome-search";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../api/auth/[...nextauth]/route";
+import { ListRandomBarbershops } from "../_helpers/list-random-barbershops";
 
 export default async function Home() {
   const session = await getServerSession(authOptions);
-  const barbershops = await db.barbershop.findMany({});
+ 
+  const [barbershops, confirmedBooking] = await Promise.all([
+    db.barbershop.findMany({}),
+    session?.user
+      ? db.booking.findMany({
+          where: {
+            userId: (session.user as any).id,
+            date: {
+              gte: new Date(),
+            },
+          },
+          include: {
+            service: true,
+            barbershop: true,
+          },
+        })
+      : Promise.resolve([]),
+  ]);  
 
-  const confirmedBooking = session?.user
-  ? await db.booking.findMany({
-      where: {
-        userId: (session.user as any).id,
-        date: {
-          gte: new Date(),
-        }
-      },
-      include: {
-        service: true,
-        barbershop: true,
-      },
-    })
-  : [];
-
-  const shuffleArray = (array: any) => {
-    const shuffledArray = [...array];
-    for (let i = shuffledArray.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [shuffledArray[i], shuffledArray[j]] = [
-        shuffledArray[j],
-        shuffledArray[i],
-      ];
-    }
-    return shuffledArray;
-  };
-
-  const shuffledBarbershops = shuffleArray(barbershops);
+  const shuffledBarbershops = ListRandomBarbershops(barbershops);
 
   return (
     <main>

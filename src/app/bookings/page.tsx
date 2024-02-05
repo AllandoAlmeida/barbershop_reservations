@@ -2,7 +2,7 @@ import Header from "@/_components/header";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../api/auth/[...nextauth]/route";
 import { db } from "@/_lib/prisma";
-import BookingItem from "@/_components/booking-item";
+import BookingItem from "@/_components/card-bookings";
 import { redirect } from "next/navigation";
 
 const Bookings = async () => {
@@ -45,24 +45,43 @@ const Bookings = async () => {
       <Header />
       <div className="px-5 py-6">
         <h1 className="text-xl font-bold">Agendamentos</h1>
+        {!confirmedBooking?.length ? (
+          <div className="py-6">
+            <h3 className="text-gray-600 uppercase font-bold text-sm mt-6 mb-3">
+            Não há histórico de agendamentos em aberto
+            </h3>
+          </div>
+        ) : (
+          <>
+            <h2 className="text-gray-400 uppercase font-bold text-sm mt-6 mb-3">
+              Em Aberto
+            </h2>
+            <div className="flex flex-col gap-3">
+              {confirmedBooking.map((booking) => (
+                <BookingItem key={booking.id} booking={booking} />
+              ))}
+            </div>
+          </>
+        )}
 
-        <h2 className="text-gray-400 uppercase font-bold text-sm mt-6 mb-3">
-          Em Aberto
-        </h2>
-        <div className="flex flex-col gap-3">
-          {confirmedBooking.map((booking) => (
-            <BookingItem key={booking.id} booking={booking} />
-          ))}
-        </div>
-
-        <h2 className="text-gray-400 uppercase font-bold text-sm mt-6 mb-3">
-          Finalizados
-        </h2>
-        <div className="flex flex-col gap-3">
-          {finashedBooking.map((booking) => (
-            <BookingItem key={booking.id} booking={booking} />
-          ))}
-        </div>
+        {!finashedBooking?.length ? (
+          <div className="py-6">
+            <h3 className="text-gray-600 uppercase font-bold text-sm mt-6 mb-3">
+              Não há histórico de agendamentos finalizados
+            </h3>
+          </div>
+        ) : (
+          <>
+            <h2 className="text-gray-400 uppercase font-bold text-sm mt-6 mb-3">
+              Finalizados
+            </h2>
+            <div className="flex flex-col gap-3">
+              {finashedBooking.map((booking) => (
+                <BookingItem key={booking.id} booking={booking} />
+              ))}
+            </div>
+          </>
+        )}
       </div>
     </>
   );
