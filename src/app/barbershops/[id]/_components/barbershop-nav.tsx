@@ -6,7 +6,7 @@ import Image from "next/image";
 import React from "react";
 import { useRouter } from "next/navigation";
 import { Sheet, SheetContent, SheetTrigger } from "@/_components/ui/sheet";
-import SidMenu from "@/_components/sid-menu";
+import SidMenu from "@/_components/side-menu";
 
 interface BarbershopDetaitsProps {
   barbershop: Barbershop;

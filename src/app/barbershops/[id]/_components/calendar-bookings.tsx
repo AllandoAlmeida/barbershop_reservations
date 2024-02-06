@@ -4,8 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import { generateDayTimeList } from "../../../_helpers/hours";
 import { Button } from "@/_components/ui/button";
 import { Barbershop, Booking, Service } from "@prisma/client";
-
-import { format, setHours, setMinutes } from "date-fns";
+import { addDays, format, setHours, setMinutes } from "date-fns";
 import { SheetFooter } from "@/_components/ui/sheet";
 import { saveBooking } from "../../../_actions/save-bookings";
 import { useSession } from "next-auth/react";
@@ -46,7 +45,7 @@ const CalendarBookings = ({
     };
 
     refreshAvailableHours();
-  }, [date,  barbershop.id]);
+  }, [date, barbershop.id]);
 
   const handleSelectDate = (date: Date | undefined) => {
     setDate(date);
@@ -55,28 +54,25 @@ const CalendarBookings = ({
 
   const timeList = useMemo(() => {
     if (!date) {
-      return []
+      return [];
     }
-    return generateDayTimeList(date).filter(time => {
-
+    return generateDayTimeList(date).filter((time) => {
       const timeHour = Number(time.split(":")[0]);
       const timeMinutes = Number(time.split(":")[1]);
 
-      const booking = dayBookings.find(booking => {
+      const booking = dayBookings.find((booking) => {
         const bookingHour = booking.date.getHours();
         const bookingMinutes = booking.date.getMinutes();
 
         return bookingHour == timeHour && bookingMinutes == timeMinutes;
-      })
+      });
 
-      if(!booking) {
+      if (!booking) {
         return true; // No hay una cita en ese momento de tiempo
       }
 
-      return false
-
-
-    })
+      return false;
+    });
   }, [date, dayBookings]);
 
   const handlerSelectHour = (time: string) => {
@@ -132,7 +128,7 @@ const CalendarBookings = ({
           selected={date}
           onSelect={handleSelectDate}
           locale={ptBR}
-          fromDate={new Date()} /* limitar a data inicial */
+          fromDate={addDays(new Date(), 1)} /* limitar a data inicial */
           styles={{
             head_cell: {
               width: "100%",
@@ -175,7 +171,12 @@ const CalendarBookings = ({
         )}
       </div>
       <div className="px-5 pb-6">
-        <CardNewBooking service={service} date={date} hour={hour} barbershop={barbershop}/>
+        <CardNewBooking
+          service={service}
+          date={date}
+          hour={hour}
+          barbershop={barbershop}
+        />
         <SheetFooter className="py-6">
           <Button
             onClick={handleCreateBooking}
