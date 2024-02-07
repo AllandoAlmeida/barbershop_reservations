@@ -31,7 +31,7 @@ export default async function Home() {
   const shuffledBarbershops = ListRandomBarbershops(barbershops);
 
   return (
-    <main>
+    <main className="mx-auto max-w-[900px]">
       <Header />
       <div className="container mx-auto px-4">
         <div className="md:flex flex-row">

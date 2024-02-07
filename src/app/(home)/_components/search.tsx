@@ -15,6 +15,7 @@ import {
 } from "@/_components/ui/form";
 import { useRouter } from "next/navigation";
 
+
 const formSearchSchema = z.object({
   search: z
   .string({
@@ -24,10 +25,16 @@ const formSearchSchema = z.object({
   .min(1, "Campo obrigatório."),
 });
 
-const Search = () => {
+interface SearchProps {
+  defaultValues?: z.infer<typeof  formSearchSchema>;
+}
+
+const Search = ({defaultValues}: SearchProps) => {
   const router = useRouter();
+
   const form = useForm<z.infer<typeof formSearchSchema>>({
     resolver: zodResolver(formSearchSchema),
+    defaultValues,
   });
 
   const handleSubmit = (data: z.infer<typeof formSearchSchema> ) => {
