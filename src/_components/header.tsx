@@ -12,9 +12,15 @@ const Header = () => {
   return (
     <header className="">
       <Card>
-        <CardContent className="mx-auto max-w-[900px] p-5 justify-between items-center flex flex-row">
-          <Link href="/">
-            <Image src="/logo.svg" alt="FSW Barber" height={18} width={120} />
+        <CardContent className="mx-auto max-w-[900px] p-5 justify-between items-center flex flex-row relative">
+          <Link href={"/"}>
+            <Image
+              src="/logo.png"
+              alt=""
+              className="md:w-[22rem] md:h-[5rem]"
+              width={100}
+              height={100}
+            />
           </Link>
           <Sheet>
             {/* Botão para abrir o menu */}
