@@ -10,11 +10,11 @@ import SideMenu from "./side-menu";
 
 const Header = () => {
   return (
-    <header className="container mx-auto px-4">
+    <header className="">
       <Card>
-        <CardContent className="p-5 justify-between items-center flex flex-row">
+        <CardContent className="mx-auto max-w-[900px] p-5 justify-between items-center flex flex-row">
           <Link href="/">
-            <Image src="/logo.png" alt="FSW Barber" height={18} width={120} />
+            <Image src="/logo.svg" alt="FSW Barber" height={18} width={120} />
           </Link>
           <Sheet>
             {/* Botão para abrir o menu */}

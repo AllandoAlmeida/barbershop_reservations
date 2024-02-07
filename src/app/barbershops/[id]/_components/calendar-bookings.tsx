@@ -32,8 +32,6 @@ const CalendarBookings = ({
   const [loading, setLoading] = useState(false);
   const [dayBookings, setDayBookings] = useState<Booking[]>([]);
 
-  console.log({ dayBookings });
-
   useEffect(() => {
     if (!date) {
       return;
@@ -121,9 +119,10 @@ const CalendarBookings = ({
   };
 
   return (
-    <div>
+    <div className="w-full">
       <div className="py-2">
         <Calendar
+          className=""
           mode="single"
           selected={date}
           onSelect={handleSelectDate}
@@ -131,11 +130,11 @@ const CalendarBookings = ({
           fromDate={addDays(new Date(), 1)} /* limitar a data inicial */
           styles={{
             head_cell: {
-              width: "100%",
+              width: "full",
               textTransform: "capitalize",
             },
             cell: {
-              width: "100%",
+              width: "full",
             },
             button: {
               width: "100%",
@@ -153,20 +152,21 @@ const CalendarBookings = ({
             },
           }}
         />
-
         {/* Mostrar lista de horários apenas se alguma data estiver selecionada */}
         {date && (
-          <div className="flex gap-3 overflow-x-auto py-3 px-5 border-t border-solid border-secondary [&::-webkit-scrollbar]:hidden">
-            {timeList.map((time) => (
-              <Button
-                onClick={() => handlerSelectHour(time)}
-                variant={hour === time ? "default" : "outline"}
-                className="rounded-full"
-                key={time}
-              >
-                {time}
-              </Button>
-            ))}
+          <div className="px-5">
+            <div className="flex gap-3 overflow-x-auto border-y border-solid border-secondary py-3 [&::-webkit-scrollbar]:hidden">
+              {timeList.map((time) => (
+                <Button
+                  onClick={() => handlerSelectHour(time)}
+                  variant={hour === time ? "default" : "outline"}
+                  className="rounded-full"
+                  key={time}
+                >
+                  {time}
+                </Button>
+              ))}
+            </div>
           </div>
         )}
       </div>

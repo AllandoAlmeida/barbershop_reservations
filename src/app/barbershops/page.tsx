@@ -19,9 +19,9 @@ const Barbershops = async ({ searchParams }: BarbershopsProps) => {
     },
   });
   return (
-    <main className="mx-auto max-w-[900px]">
+    <main >
       <Header />
-      <div className="px-6 py-6">
+      <div className="mx-auto max-w-[900px] py-6">
         <Search
           defaultValues={{
             search: searchParams.search,

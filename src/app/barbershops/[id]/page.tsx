@@ -25,17 +25,19 @@ const BarbershopDetails = async ({ params }: BarbershopDetailsProps) => {
   }
 
   return (
-    <main className="mx-auto max-w-[900px]">
-      <BarbershopNav barbershop={barbershop} />
-      <div className="md:grid grid-cols-2 sm:gap-4 px-5 py-6">
-        {barbershop.services.map((service) => (
-          <CardService
-            key={service.id}
-            barbershop={barbershop}
-            service={service}
-            isAuthenticated={!!session?.user}
-          />
-        ))}
+    <main>
+      <div className="mx-auto max-w-[900px]">
+        <BarbershopNav barbershop={barbershop} />
+        <div className="md:grid grid-cols-2 sm:gap-4 px-5 py-6">
+          {barbershop.services.map((service) => (
+            <CardService
+              key={service.id}
+              barbershop={barbershop}
+              service={service}
+              isAuthenticated={!!session?.user}
+            />
+          ))}
+        </div>
       </div>
     </main>
   );

@@ -14,6 +14,7 @@ import { signIn } from "next-auth/react";
 import Image from "next/image";
 import CalendarBookings from "./calendar-bookings";
 import { useState } from "react";
+import { toast } from "sonner";
 
 interface CardServiceProps {
   barbershop: Barbershop;
@@ -28,7 +29,20 @@ const CardService = ({
 }: CardServiceProps) => {
   const [sheetIsOpen, setSheetIsOpen] = useState(false);
   const handleCreateBooking = () => {
-    if (!isAuthenticated) return signIn("google");
+    if (!isAuthenticated) {
+      toast.info("Para continuar, faça o login e refaça a operação", {
+        position: "top-right",
+        duration: 5000,
+        style: {
+          borderRadius: "8px",
+          backgroundColor: "hsl(7.307692307692308, 92.85714285714285%, 32.94117647058823%)",
+          color: "#fff",
+          fontFamily: "Archivo Black",
+        },
+      });
+     
+      return signIn("google");
+    }
   };
   return (
     <Card className="p-3 w-full my-3 flex flex-col md:my-0 gap-3 flex-1">
@@ -46,9 +60,7 @@ const CardService = ({
             </div>
             <div className="flex flex-col w-[100%] flex-1">
               <h2 className="font-bold">{service.name}</h2>
-              <p className="text-sm text-gray-400">
-                {service.description}
-              </p>
+              <p className="text-sm text-gray-400">{service.description}</p>
 
               <div className="flex items-center justify-between mt-3 ">
                 <p className="text-primary font-bold">
@@ -68,7 +80,7 @@ const CardService = ({
                       Reservar
                     </Button>
                   </SheetTrigger>
-                  <SheetContent className="p-0">
+                  <SheetContent className="w-full p-0">
                     <SheetHeader className="text-left px-5 py-6 border-b border-solid border-secundary">
                       <SheetTitle>Fazer reserva</SheetTitle>
                     </SheetHeader>
