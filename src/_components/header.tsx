@@ -7,6 +7,7 @@ import { Sheet, SheetContent, SheetTrigger } from "./ui/sheet";
 
 import Link from "next/link";
 import SideMenu from "./side-menu";
+import LogoHearde from "./logo-header";
 
 const Header = () => {
   return (
@@ -14,13 +15,7 @@ const Header = () => {
       <Card>
         <CardContent className="mx-auto max-w-[900px] p-5 justify-between items-center flex flex-row relative">
           <Link href={"/"}>
-            <Image
-              src="/logo.png"
-              alt=""
-              className="md:w-[22rem] md:h-[5rem]"
-              width={100}
-              height={100}
-            />
+          <LogoHearde/>
           </Link>
           <Sheet>
             {/* Botão para abrir o menu */}
