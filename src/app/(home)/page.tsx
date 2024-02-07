@@ -9,7 +9,7 @@ import { authOptions } from "@/_lib/auth";
 
 export default async function Home() {
   const session = await getServerSession(authOptions);
- 
+
   const [barbershops, confirmedBooking] = await Promise.all([
     db.barbershop.findMany({}),
     session?.user
@@ -26,7 +26,7 @@ export default async function Home() {
           },
         })
       : Promise.resolve([]),
-  ]);  
+  ]);
 
   const shuffledBarbershops = ListRandomBarbershops(barbershops);
 
@@ -61,7 +61,12 @@ export default async function Home() {
             </h2>
             <div className="flex gap-4  overflow-x-auto [&::-webkit-scrollbar]:hidden">
               {barbershops.map((barbershop) => (
-                <BarbershopItem key={barbershop.id} barbershop={barbershop} />
+                <div
+                  key={barbershop.id}
+                  className="min-w-[10.4375rem] max-w-[10.4375rem]"
+                >
+                  <BarbershopItem key={barbershop.id} barbershop={barbershop} />
+                </div>
               ))}
             </div>
           </div>
@@ -72,7 +77,12 @@ export default async function Home() {
           </h2>
           <div className="flex gap-4  overflow-x-auto [&::-webkit-scrollbar]:hidden">
             {shuffledBarbershops.map((barbershop) => (
-              <BarbershopItem key={barbershop.id} barbershop={barbershop} />
+              <div
+                key={barbershop.id}
+                className="min-w-[10.4375rem] max-w-[10.4375rem]"
+              >
+                <BarbershopItem key={barbershop.id} barbershop={barbershop} />
+              </div>
             ))}
           </div>
         </div>

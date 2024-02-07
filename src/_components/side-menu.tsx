@@ -55,7 +55,7 @@ const SidMenu = () => {
         <Button
           variant={"secondary"}
           className="justify-start"
-          onClick={handleLogIn}
+          /* onClick={handleLogIn} */
           asChild
         >
           <Link href={"/"}>

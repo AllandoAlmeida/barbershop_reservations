@@ -43,4 +43,10 @@
   body {
     @apply bg-background text-foreground antialiased h-screen flex flex-col;
   }
+  .image-service-mobile {
+    @apply min-h-[4rem] min-w-[4rem] max-h-[4rem] max-w-[4rem]
+  }
+  .image-service-web {
+    @apply min-h-[6.8rem] min-w-[6.8rem] max-h-[6.8rem] max-w-[6.8rem]
+  }
 }
