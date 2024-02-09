@@ -23,7 +23,7 @@ const WelcomeOrSearch = () => {
         </p>
       </div>
 
-      <div className="px-5 mt-6">
+      <div className="px-5 mt-9">
         <Search />
       </div>
     </div>
